@@ -1,0 +1,21 @@
+/* Estilos globais */
+.divider {
+    margin-top: 2.5rem;
+}
+
+.my_container {
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
+
+/* Aplica a classe `container` apenas para dispositivos menores que 768px */
+@media (max-width: 767.98px) {
+    .my_container {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 15px;
+        padding-right: 15px;
+        max-width: 100%;
+        width: auto;
+    }
+}

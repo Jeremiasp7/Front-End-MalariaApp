@@ -1,0 +1,13 @@
+/* HEADER */
+
+
+/*MAIN*/
+.divider {
+    margin-top: 5rem;
+}
+
+.card-img-top {
+    height: 20rem; /* Ajuste a altura conforme necessário */
+    width: 100%; /* Garante que a imagem ocupe toda a largura do card */
+    object-fit: cover; /* Garante que a imagem se ajuste ao tamanho do contêiner */
+  }
