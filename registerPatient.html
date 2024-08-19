@@ -20,15 +20,7 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Authentication
-                        </a>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">Users</a></li>
-                          <li><a class="dropdown-item" href="#">Groups</a></li>
-                        </ul>  
+                <ul class="navbar-nav ms-auto">  
                     <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="registerPatient.html">Patients</a>
                     </li>
@@ -37,6 +29,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="addImages.html">Images</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="">Network</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="">Classification</a>
                     </li>
                 </ul>
               </div>
@@ -49,22 +47,8 @@
           <h3>Register patient</h3>
             <form class="row g-3 mt-2">
                 <div class="col-md-6">
-                  <label for="validationDefault01" class="form-label">First name</label>
+                  <label for="patientName" class="form-label">Name</label>
                   <input type="text" class="form-control" id="validationDefault01" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="validationDefault02" class="form-label">Last name</label>
-                  <input type="text" class="form-control" id="validationDefault02" required>
-                </div>
-          
-                <div class="col-md-6">
-                  <label for="validationDefault04" class="form-label">Who's Registering</label>
-                  <select class="form-select" id="validationDefault04" required>
-                    <option selected disabled value="">Choose</option>
-                    <option>Huguinho</option>
-                    <option>Zezinho</option>
-                    <option>Luisinho</option>
-                  </select>
                 </div>
                 <div class="col-md-6">
                   <label for="validationDefault05" class="form-label">Age</label>
@@ -95,7 +79,6 @@
                               <tr>
                                   <th>#</th>
                                   <th>First Name</th>
-                                  <th>Last Name</th>
                                   <th>Age</th>
                               </tr>
                           </thead>
