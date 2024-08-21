@@ -45,7 +45,7 @@
     <main class="my_container">
         <section id="patientRegistration" class="divider">
             <h3>Make classification</h3>
-            <form id="networkForm" class="row g-3 mt-2">
+            <form id="classificationForm" class="row g-3 mt-2">
                 <div class="col-md-6">
                   <label for="patientId" class="form-label">Patient Id</label>
                   <input type="text" class="form-control" id="patientId" required>
@@ -66,6 +66,43 @@
               </form>
         </section>
     </main>  
+
+    <script>
+      document.getElementById('classificationForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const patientId = document.getElementById('patientId').value;
+        const networkId = document.getElementById('networkId').value;
+        const imageId = document.getElementById('imageId').value;
+
+        const networkData = {
+          user_id: patientId,
+          network_id: networkId,
+          image_id: imageId
+        }
+
+        try {
+              const response = await fetch(`http://localhost:8080/v1/users/${patientId}/networks/${networkId}/images/${imageId}`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(networkData),
+              });
+      
+              if (!response.ok) {
+                  throw new Error('Network response was not ok.');
+              }
+      
+              const result = await response.json();
+              alert('Classification uploaded successfully!');
+              console.log(result);
+          } catch (error) {
+              console.error('There was a problem with the fetch operation:', error);
+              alert('Failed to upload classification.');
+          }
+      })
+    </script>
 
     <!--Poppers do Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

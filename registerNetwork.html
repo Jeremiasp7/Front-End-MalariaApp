@@ -59,6 +59,10 @@
                     <label for="apiKey" class="form-label">Api Key</label>
                     <input type="text" class="form-control" id="apiKey" required>
                 </div>
+                <div class="col-md-6">
+                  <label for="networkLabels" class="form-label">Labels</label>
+                  <input type="text" class="form-control" id="networkLabels" placeholder="Enter comma-separated labels" required>
+              </div>
        
                 <div class="col-12">
                   <button class="btn btn-primary" type="submit">Register</button>
@@ -66,6 +70,46 @@
               </form>
         </section>
     </main>  
+
+    <script>
+      document.getElementById('networkForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const networkName = document.getElementById('networkName').value;
+        const networkUrl = document.getElementById('networkUrl').value;
+        const apiKey = document.getElementById('apiKey').value;
+        const networkLabels = document.getElementById('networkLabels').value
+        const labels = networkLabels.split(',').map(label => label.trim());
+
+        const networkData = {
+          name: networkName,
+          url: networkUrl,
+          api_key: apiKey,
+          labels: labels
+        }
+
+        try {
+              const response = await fetch('http://localhost:8080/v1/networks', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(networkData),
+              });
+      
+              if (!response.ok) {
+                  throw new Error('Network response was not ok.');
+              }
+      
+              const result = await response.json();
+              alert('Network uploaded successfully!');
+              console.log(result);
+          } catch (error) {
+              console.error('There was a problem with the fetch operation:', error);
+              alert('Failed to upload network.');
+          }
+      })
+    </script>
 
     <!--Poppers do Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

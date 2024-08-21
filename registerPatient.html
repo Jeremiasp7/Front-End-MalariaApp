@@ -45,10 +45,10 @@
     <main class="my_container">
         <section id="patientRegistration" class="divider">
           <h3>Register patient</h3>
-            <form class="row g-3 mt-2">
+            <form id="patientForm" class="row g-3 mt-2">
                 <div class="col">
                   <label for="patientName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="validationDefault01" required>
+                  <input type="text" class="form-control" id="patientName" required>
                 </div>
     
                 <div class="col-12">
@@ -99,6 +99,40 @@
           </div>
         </section>
     </main>  
+
+    <script>
+      document.getElementById('patientForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); //Impede o envio padrão do formulário
+
+        const patientName = document.getElementById('patientName').value;
+
+        const patientData = {
+          name: patientName,
+          document: 1
+        }
+
+        try {
+          const response = await fetch('http://localhost:8080/v1/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(patientData),
+          })
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+
+          const result = await response.json();
+          alert('User registered successfully!');
+          console.log(result);
+        } catch(error) {
+          console.error('There was a problem with the fetch operation:', error);
+          alert('Failed to register user.');
+        }
+      });
+    </script>
 
     <!--Poppers do Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
