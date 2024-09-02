@@ -58,7 +58,36 @@
               <div class="col-12">  
                 <button class="btn btn-primary" type="submit">Register</button>
               </div>
-            
+        </section>
+
+         <!-- Seção de listagem de imagens -->
+         <section id="imageList" class="divider">
+          <h3>Image list</h3>
+          <div class="container mt-4">
+            <!-- Campo de busca -->
+            <div class="row mb-2">
+              <div class="col-6 ">
+                <input type="text" id="imageSearch" class="form-control" placeholder="Search for an image...">
+              </div>
+            </div>
+      
+            <div class="row">
+              <div class="col-12">
+                  <div class="table-responsive">
+                      <table class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Id</th>
+                                  <th>Name</th>
+                              </tr>
+                          </thead>
+                          <tbody id="imageListBody">
+                              <!-- Renderizar a lista de imagens -->
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
         </section>
     </main>  
 
@@ -96,6 +125,37 @@
               alert('Failed to upload image.');
           }
       });
+
+      async function fetchImages() {
+          try {
+              const response = await fetch('http://localhost:8080/v1/images');
+              if (!response.ok) {
+                  throw new Error('Failed to fetch images');
+              }
+
+              const images = await response.json();
+              const imageListBody = document.getElementById('imageListBody');
+
+              // Limpa a lista de imagens antes de renderizar
+              imageListBody.innerHTML = '';
+
+              // Renderiza cada imagem na tabela
+              images.forEach((image, index) => {
+                  const row = document.createElement('tr');
+                  row.innerHTML = `
+                      <td>${images.id}</td>
+                      <td>${images.name}</td>
+                  `;
+                  imageListBody.appendChild(row);
+              });
+          } catch (error) {
+              console.error('There was a problem with the fetch operation:', error);
+              alert('Failed to load image list.');
+          }
+      }
+
+      // Chama a função para buscar e renderizar as imagens assim que a página carregar
+      window.onload = fetchImages;
       </script>
 
     <!--Poppers do Bootstrap-->

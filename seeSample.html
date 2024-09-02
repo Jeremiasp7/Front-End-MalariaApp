@@ -43,7 +43,7 @@
     </header>
 
     <main class="my_container">
-        <section id="patientRegistration" class="divider">
+        <section id="sampleRegistration" class="divider">
             <h3>Register sample</h3>
             <form id="sampleForm" class="row g-3 mt-2">
                 <div class="col-md-6">
@@ -90,31 +90,18 @@
                       <table class="table table-striped">
                           <thead>
                               <tr>
-                                  <th>#</th>
+                                  <th>Id</th>
                                   <th>Patient Id</th>
-                                  <th>Sample type</th>
-                                  <th>Health center</th>
-                                  <th>Date Published</th>
+                                  <th>Type</th>
+                                  <th>Health Center</th>
                               </tr>
                           </thead>
-                          <tbody id="sampleList">
+                          <tbody id="sampleListBody">
                               <!-- Renderizar a lista de samples -->
                           </tbody>
                       </table>
                   </div>
               </div>
-          </div>
-          
-            <!-- Paginação -->
-            <div class="row">
-              <div class="col-12">
-                <nav>
-                  <ul class="pagination justify-content-center">
-                    <!-- Renderizar os links de paginação -->
-                  </ul>
-                </nav>
-              </div>
-            </div>
           </div>
         </section>
     </main>  
@@ -148,7 +135,7 @@
   
               const result = await response.json();
               alert('Sample registered successfully!');
-              console.log(result);
+              fetchSamples(); // Atualiza a lista após o registro
           } catch (error) {
               console.error('There was a problem with the fetch operation:', error);
               alert('Failed to register sample.');
@@ -159,21 +146,35 @@
           try {
               const response = await fetch('http://localhost:8080/v1/samples');
               if (!response.ok) {
-                  throw new Error('Network response was not ok.');
+                  throw new Error('Failed to fetch samples');
               }
-              const result = await response.json();
-              console.log(result);
-              // Renderizar a lista de samples na tabela
+
+              const samples = await response.json();
+              const sampleListBody = document.getElementById('sampleListBody');
+
+              // Limpa a lista de samples antes de renderizar
+              sampleListBody.innerHTML = '';
+
+              // Renderiza cada sample na tabela
+              samples.forEach((sample, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                  <td>${sample.id}</td>
+                  <td>${sample.user_id}</td>
+                  <td>${sample.sample_type}</td>
+                  <td>${sample.helth_center}</td>
+                `;
+                sampleListBody.appendChild(row);
+              });
           } catch (error) {
               console.error('There was a problem with the fetch operation:', error);
               alert('Failed to load sample list.');
           }
       }
 
-      fetchSamples();
+      // Chama a função para buscar e renderizar os samples assim que a página carregar
+      window.onload = fetchSamples;
     </script>
-
-    <script src="script.js"></script>
 
     <!--Poppers do Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

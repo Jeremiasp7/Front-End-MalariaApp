@@ -43,7 +43,7 @@
     </header>
 
     <main class="my_container">
-        <section id="patientRegistration" class="divider">
+        <section id="networkRegistration" class="divider">
             <h3>Register network</h3>
             <form id="networkForm" class="row g-3 mt-2">
                 <div class="col-md-6">
@@ -69,6 +69,38 @@
                 </div>
               </form>
         </section>
+
+        <!-- Seção de listagem de networks -->
+        <section id="networkList" class="divider">
+          <h3>Network list</h3>
+          <div class="container mt-4">
+            <!-- Campo de busca -->
+            <div class="row mb-2">
+              <div class="col-6 ">
+                <input type="text" id="networkSearch" class="form-control" placeholder="Search for a network...">
+              </div>
+            </div>
+      
+            <div class="row">
+              <div class="col-12">
+                  <div class="table-responsive">
+                      <table class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Id</th>
+                                  <th>Name</th>
+                                  <th>URL</th>
+                                  <th>API Key</th>
+                              </tr>
+                          </thead>
+                          <tbody id="networkListBody">
+                              <!-- Renderizar a lista de networks -->
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+        </section>
     </main>  
 
     <script>
@@ -78,7 +110,7 @@
         const networkName = document.getElementById('networkName').value;
         const networkUrl = document.getElementById('networkUrl').value;
         const apiKey = document.getElementById('apiKey').value;
-        const networkLabels = document.getElementById('networkLabels').value
+        const networkLabels = document.getElementById('networkLabels').value;
         const labels = networkLabels.split(',').map(label => label.trim());
 
         const networkData = {
@@ -86,7 +118,7 @@
           url: networkUrl,
           api_key: apiKey,
           labels: labels
-        }
+        };
 
         try {
               const response = await fetch('http://localhost:8080/v1/networks', {
@@ -103,12 +135,44 @@
       
               const result = await response.json();
               alert('Network uploaded successfully!');
-              console.log(result);
+              fetchNetworks(); // Atualiza a lista após o registro
           } catch (error) {
               console.error('There was a problem with the fetch operation:', error);
               alert('Failed to upload network.');
           }
-      })
+      });
+
+      async function fetchNetworks() {
+          try {
+              const response = await fetch('http://localhost:8080/v1/networks');
+        if (!response.ok) {
+              throw new Error('Failed to fetch networks');
+            }
+
+            const networks = await response.json();
+            const networkListBody = document.getElementById('networkListBody');
+            
+        
+            networkListBody.innerHTML = '';
+            
+            networks.forEach((network, index) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${network.id}</td>
+                <td>${network.name}</td>
+                <td>${network.url}</td>
+                <td>${network.api_key}</td>
+              `;
+                networkListBody.appendChild(row);
+            });
+          } catch (error) {
+             console.error('There was a problem with the fetch operation:', error);
+             alert('Failed to load network list.');
+         }
+      }
+
+      // Chama a função para buscar e renderizar os networks assim que a página carregar
+      window.onload = fetchNetworks;
     </script>
 
     <!--Poppers do Bootstrap-->
