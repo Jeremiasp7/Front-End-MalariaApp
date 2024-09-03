@@ -52,7 +52,7 @@
             </div>
               <div class="col-md-6">
                 <label for="imageFile" class="form-label">Content</label>
-                <input class="form-control" type="file" id="imageFile">
+                <input class="form-control" type="file" id="imageFile" required>
               </div>
           
               <div class="col-12">  
@@ -97,20 +97,30 @@
           event.preventDefault(); // Impede o envio padrão do formulário
       
           const imageName = document.getElementById('imageName').value;
-          const imageFile = document.getElementById('imageFile').value;
+          const imageFile = document.getElementById('imageFile').files[0];
 
-          const imageData = {
-            name: imageName,
-            content: imageFile
-          }
-      
+          // Função para converter o arquivo de imagem em Base64
+          const toBase64 = (file) => new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = error => reject(error);
+          });
+
           try {
+              const base64Image = await toBase64(imageFile); // Converte o arquivo para Base64
+
+              const imageData = {
+                  name: imageName,
+                  content: base64Image // Armazena o arquivo convertido em Base64
+              };
+      
               const response = await fetch('http://localhost:8080/v1/images', {
                   method: 'POST',
                   headers: {
-                    'Content-Type': 'application/json'
+                      'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify(imageData),
+                  body: JSON.stringify(imageData) // Envia os dados como JSON
               });
       
               if (!response.ok) {
@@ -143,8 +153,8 @@
               images.forEach((image, index) => {
                   const row = document.createElement('tr');
                   row.innerHTML = `
-                      <td>${images.id}</td>
-                      <td>${images.name}</td>
+                      <td>${image.id}</td>
+                      <td>${image.name}</td>
                   `;
                   imageListBody.appendChild(row);
               });
